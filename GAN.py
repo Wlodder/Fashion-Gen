@@ -30,22 +30,30 @@ adam_beta = 0.5
 
 # Data extraction
 def load_data():
-	training_set = np.array(pd.read_csv("./data/fashion-mnist_train.csv"))
+	training_set = np.array(pd.read_csv("../data/fashion-mnist_train.csv"))
 	training_samples = training_set[:,1:]
 	training_labels = training_set[:,0]
 
-	testing_set = np.array(pd.read_csv("./data/fashion-mnist_test.csv"))
+	testing_set = np.array(pd.read_csv("../data/fashion-mnist_test.csv"))
 	testing_samples = testing_set[:,1:]
 	testing_labels = testing_set[:,0]
 
 	real_set = np.append(training_samples, testing_samples, 0)
 	real_labels = np.append(training_labels, testing_labels, 0)
 
-	selected_ix = real_labels == 9
-	selected_o_ix = real_labels == 7
-	real_set_1 = real_set[selected_ix]
-	real_set_2 = real_set[selected_o_ix]
-	real_set = np.append(real_set_2, real_set_1, 0)
+	base_set = 'empty'
+
+	# labels wanted
+	data_subset = [7, 9]
+
+	for label in data_subset:	
+		selected_ix = real_labels == label
+		real_set_sel = real_set[selected_ix]
+		if base_set == 'empty':
+			base_set = real_set_sel
+		else:
+			base_set = np.append(base_set, real_set_sel, 0)
+	
 	real_set = real_set.astype('float32')
 	real_samples = (real_set - 127.5) / 127.5
 
@@ -180,11 +188,16 @@ def summarize_performance(step, g_model, latent_dim, n_samples=100):
 		plt.imshow(X[i,:].reshape(28,28), cmap='gray_r')
 	
 	# save plot to file
-	plt.savefig('results_collapse/generated_plot_%03d.png' % (step+1))
+	plt.savefig('../results_collapse/generated_plot_%03d.png' % (step+1))
 	plt.close()
+
+	for i in range(10 * 10):
+		plt.imshow(X[i,:].reshape(28,28), cmap='gray_r')
+		plt.savefig('individual_samples/generated_sample_%03d_%01d.png' % (step+1, i))
+
 	
 	# save the generator model
-	g_model.save('results_collapse/model_%03d.h5' % (step+1))
+	g_model.save('../results_collapse/model_%03d.h5' % (step+1))
 
 # create a line plot of loss for the gan and save to file
 def plot_history(d1_hist, d2_hist, g_hist, a1_hist, a2_hist):
@@ -200,7 +213,7 @@ def plot_history(d1_hist, d2_hist, g_hist, a1_hist, a2_hist):
 	plt.plot(a2_hist, label='fake-accuracy')
 	plt.legend()
 	# save plot to file
-	plt.savefig('results_collapse/plot_line_plot_loss.png')
+	plt.savefig('../results_collapse/plot_line_plot_loss.png')
 	plt.close()
 
 def train(g_model, d_model, gan_model, dataset, latent_dim, n_epochs=10, n_batch=128):
@@ -240,6 +253,8 @@ def train(g_model, d_model, gan_model, dataset, latent_dim, n_epochs=10, n_batch
         g_loss = gan_model.train_on_batch(X_gan, y_gan)
 		
 		# fail state update
+        if fail_conv.full():
+            _ = fail_conv.get()
         fail_conv.put_nowait((d_loss1, g_loss))
 
 		# summarize loss on this batch
@@ -279,4 +294,4 @@ gan_model = define_gan(generator, discriminator)
 # load image data
 dataset = load_data()
 # train model
-train(generator, discriminator, gan_model, dataset, latent_dimensions, 25)
+train(generator, discriminator, gan_model, dataset, latent_dimensions, 10)
