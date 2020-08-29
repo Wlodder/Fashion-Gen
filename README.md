@@ -17,6 +17,6 @@ was placed in the training procedure to detect however it will cause the trainin
 * Image processing to sharpen images
 
 ## Resources used
-https://developers.google.com/machine-learning/gan/training
-https://machinelearningmastery.com/practical-guide-to-gan-failure-modes/
-https://arxiv.org/abs/1701.00160
+** https://developers.google.com/machine-learning/gan/training
+** https://machinelearningmastery.com/practical-guide-to-gan-failure-modes/
+** https://arxiv.org/abs/1701.00160
