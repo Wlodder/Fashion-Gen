@@ -12,11 +12,16 @@ Associated loss and accuracy graphs were produced for each of the training sessi
 was placed in the training procedure to detect however it will cause the training to be cut short when sometimes the model can recover and produce okay samples. GAN was used for its ability to generate high dimensional data without the restriction of having to use a binary input like a RBM or Hopfield network.
 
 An over lay generated patterns for an RBM trained using https://www.kaggle.com/mikuns/african-fabric and processed using OTSU binary threshold to prepare data for the RBM's
-visible layer, each of the images is 64 x 64 pixels. 
+visible layer, each of the images is 64 x 64 pixels. When developing the patterns a few tips:
+
+* Pick similar overall pattern shapes e.g. samples with high amounts of repetitive designs, many 'scarf' samples
+* The higher the number of samples used the more sparse the pattern becomes, stick to low numbers for high fidelity
+* Run a few times to get patterns you like then save
 
 ## Things to add
 * Wasserstein loss function for increased stability of training
 * Image processing to sharpen images
+* Add colour 
 
 ## Resources used
 ### GAN
