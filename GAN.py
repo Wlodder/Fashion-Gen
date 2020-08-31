@@ -44,7 +44,7 @@ def load_data():
 	base_set = 'empty'
 
 	# labels wanted
-	data_subset = [7, 9]
+	data_subset = [9]
 
 	for label in data_subset:	
 		selected_ix = real_labels == label
@@ -54,7 +54,7 @@ def load_data():
 		else:
 			base_set = np.append(base_set, real_set_sel, 0)
 	
-	real_set = real_set.astype('float32')
+	real_set = base_set.astype('float32')
 	real_samples = (real_set - 127.5) / 127.5
 
 	real_samples = np.reshape(real_samples,(real_samples.shape[0],28,28))
@@ -184,7 +184,7 @@ def summarize_performance(step, g_model, latent_dim, n_samples=100):
 	# plot images
 	for i in range(10 * 10):
 		plt.subplot(10, 10, 1 + i)
-		
+		plt.axis('off')
 		plt.imshow(X[i,:].reshape(28,28), cmap='gray_r')
 	
 	# save plot to file
@@ -193,8 +193,9 @@ def summarize_performance(step, g_model, latent_dim, n_samples=100):
 
 	for i in range(10 * 10):
 		plt.imshow(X[i,:].reshape(28,28), cmap='gray_r')
+		plt.axis('off')
 		plt.savefig('individual_samples/generated_sample_%03d_%01d.png' % (step+1, i))
-
+		plt.close()
 	
 	# save the generator model
 	g_model.save('../results_collapse/model_%03d.h5' % (step+1))
@@ -294,4 +295,4 @@ gan_model = define_gan(generator, discriminator)
 # load image data
 dataset = load_data()
 # train model
-train(generator, discriminator, gan_model, dataset, latent_dimensions, 10)
+train(generator, discriminator, gan_model, dataset, latent_dimensions, 25)

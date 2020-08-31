@@ -22,7 +22,6 @@ resized_img = cv2.resize(img, new_dim, interpolation=cv2.INTER_AREA)
 # gradient smoothed
 gradient_smoothed = cv2.Sobel(resized_img, cv2.CV_64F, 1, 0, ksize=5)
 
-
 # edge detection
 blur = cv2.GaussianBlur(resized_img, (5,5), 0)
 edges = cv2.Canny(blur, 100, 200)
