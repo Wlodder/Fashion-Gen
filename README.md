@@ -18,10 +18,19 @@ visible layer, each of the images is 64 x 64 pixels. When developing the pattern
 * The higher the number of samples used the more sparse the pattern becomes, stick to low numbers for high fidelity
 * Run a few times to get patterns you like then save
 
+Later the pattern and the shoe design are processed and combined into an image using the following steps:
+* Apply random colours to pattern, 1:1 replacement
+* Both shoe design and pattern are treated with Gaussian filter to help smooth out pixel design
+* Treat shoe design as bit mask to apply pattern to shoe shape
+* Vary colour strengths using pixel values from shoe image (lighter colour strength for whiter pixels)
+* Overlay edges detected from shoe original image (Canny edge detection) for higher definition
+
 ## Things to add
 * Wasserstein loss function for increased stability of training
 * Image processing to sharpen images
-* Add colour 
+* Add depth to pattern to conform to shoe 
+* Turn RBM into deep belief network
+* Make project one complete pipline
 
 ## Resources used
 ### GAN
